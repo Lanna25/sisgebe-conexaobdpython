@@ -1,35 +1,47 @@
 from db_config import conectar
 
 def criar_categoria(nome, descricao):
-    conn = conectar()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO Categoria (nome, descricao) VALUES (%s, %s)", (nome, descricao))
-    conn.commit()
-    conn.close()
-    print("Categoria criada com sucesso!")
-
-    def listar_categorias():
+    try:
         conn = conectar()
-        cursor = conn.cursor(disctionary=True)
-        cursor.execute("SELECT * FROM Categoria")
-        categorias = cursor.fetchall()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO Categoria (nome, descricao) VALUES (%s, %s)", (nome, descricao))
+        conn.commit()
+        return{"status": "sucesso", "mensagem":"Categoria criada com sucesso!"}
+    except Exception as e:
+        return{"status":"erro","mensagem":str(e)}
+    finally:
         conn.close()
-        return categorias
+        
+    def listar_categorias():
+        try:
+            conn = conectar()
+            cursor = conn.cursor(disctionary=True)
+            cursor.execute("SELECT * FROM Categoria")
+            return cursor.fetchall()
+        except Exception as e:
+            return{"status":"erro","mensagem":str()}
+        finally:
+            conn.close()
 
-    def atualizar_categoria(id_categoria, novo_nome, nova_descricao):
+def atualizar_categoria(id_categoria, novo_nome, nova_descricao):
+    try:
         conn = conectar()
         cursor = conn.cursor()
         cursor.execute("UPDATE Categoria SET nome=%s, descricao=%s WHERE id=%s",
-                        (novo_nome, nova_descricao, id_categoria))
+                    (novo_nome, nova_descricao, id_categoria))
         conn.commit()
+        if cursos.rowcount == 0:
+            return{"status":"aviso","mensagem": "Nenhuma catecoria encontrada para atualizar."}
+        return{"ststus":"sucesso","mensagem":"Categoria atualizada!"}
+    except Exceptionas e:
+        return{"status":"erro","mensagem": str(e)}
+    finally:
         conn.close()
-        print("Categoria atualizada!")
 
-    def deletar_categoria(id_categoria):
+def deletar_categoria(id_categoria):
         conn = conectar()
         cursor = conn.cursor()
         cursor.execute("DELETE FROM Categoria WHERE id=%s", (id_categoria))
         conn.commit()
         conn.close()
         print("Categoria excluída!")
-        

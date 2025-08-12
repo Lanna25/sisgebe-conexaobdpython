@@ -15,11 +15,11 @@ def criar_categoria(nome, descricao):
 def listar_categorias():
     try:
         conn = conectar()
-        cursor = conn.cursor(disctionary=True)
+        cursor = conn.cursor(dictionary=True)
         cursor.execute("SELECT * FROM Categoria")
         return cursor.fetchall()
     except Exception as e:
-        return{"status":"erro","mensagem":str()}
+        return{"status":"erro","mensagem":str(e)}
     finally:
         conn.close()
 
@@ -27,14 +27,14 @@ def atualizar_categoria(id_categoria, novo_nome, nova_descricao):
     try:
         conn = conectar()
         cursor = conn.cursor()
-        cursor.execute("UPDATE Categoria SET nome=%s, descricao=%s WHERE id=%s",
+        cursor.execute("UPDATE Categoria SET nome=%s, descricao=%s WHERE id=%s", 
                     (novo_nome, nova_descricao, id_categoria))
         conn.commit()
-        if cursos.rowcount == 0:
-            return{"status":"aviso","mensagem": "Nenhuma catecoria encontrada para atualizar."}
-        return{"ststus":"sucesso","mensagem":"Categoria atualizada!"}
-    except Exceptionas as e:
-        return{"status":"erro","mensagem": str(e)}
+        if cursor.rowcount == 0:
+            return{"status":"aviso","mensagem":"Nenhuma categoria encontrada para atualizar."}
+        return{"status":"sucesso","mensagem":"Categoria atualizada!"}
+    except Exception as e:
+        return{"status":"erro","mensagem":str(e)}
     finally:
         conn.close()
 
@@ -42,11 +42,11 @@ def deletar_categoria(id_categoria):
     try:
         conn = conectar()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM Categoria WHERE id=%s", (id_categoria))
+        cursor.execute("DELETE FROM Categoria WHERE id=%s", (id_categoria,))
         conn.commit()
         if cursor.rowcount == 0:
             return{"status":"aviso","mensagem":"Nenhuma categoria encontrada para deletar."}
-        return{"status":"sucesso","mensagem":"categoria excluida!."}
+        return{"status":"sucesso","mensagem":"Categoria excluida!"}
     except Exception as e:
         return{"status":"erro","mensagem":str(e)}
     finally:

@@ -1,4 +1,4 @@
-#crud_livro.py
+# crud_livro.py
 from db_config import conectar
 
 def criar_livro(titulo, autor, isbn=None, sinopse=None, capa=None, quantidade=1, categoria_id=None):
@@ -6,11 +6,11 @@ def criar_livro(titulo, autor, isbn=None, sinopse=None, capa=None, quantidade=1,
         conn = conectar()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INT Livro (titulo, autor, isbn, sinopse, capa, quatidade, categoria_id)VALUES (%s,%s, %s,%s, %s, %s, %s)",
-            (titulo, author_or_none(autor), isbn, sinopse, capa, quatidade, categoria_id)
+            "INSERT INTO Livro (titulo, autor, isbn, sinopse, capa, quantidade, categoria_id) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            (titulo, author_or_none(autor), isbn, sinopse, capa, quantidade, categoria_id)
         )
         conn.commit()
-        return{"status":"sucesso","mensagem":"livro criado com sucesso.","id":cursor.lastrowid}
+        return {"status":"sucesso","mensagem":"Livro criado com sucesso.","id":cursor.lastrowid}
     except Exception as e:
         return {"status":"erro","mensagem":str(e)}
     finally:
@@ -23,7 +23,7 @@ def author_or_none(a):
 def listar_livros():
     try:
         conn = conectar()
-        cursor = conn.cursor(disctionary=True)
+        cursor = conn.cursor(dictionary=True)
         cursor.execute("SELECT * FROM Livro")
         return cursor.fetchall()
     except Exception as e:
@@ -35,14 +35,14 @@ def listar_livros():
 def obter_livro(id_livro):
     try:
         conn = conectar()
-        cursor = conn.cursor(disctionary=True)
-        cursor = execute("SELECT *FROM Livro WHERE id=%s", (id_livro,))
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM Livro WHERE id=%s", (id_livro,))
         row = cursor.fetchone()
         if not row:
             return {"status":"aviso","mensagem":"Livro não encontrado."}
         return row
     except Exception as e:
-        return {"status":"erro"<"mensagem":str(e)}
+        return {"status":"erro","mensagem":str(e)}
     finally:
         try: conn.close()
         except: pass
@@ -52,8 +52,8 @@ def atualizar_livro(id_livro, titulo, autor, isbn, sinopse, capa, quantidade, ca
         conn = conectar()
         cursor = conn.cursor()
         cursor.execute(
-            "UPDATE Livro SET titulo=%s, autor=%s, isbn=%s, sinopse=%s, capa%s, quantidade%s, categoria_id%s,WHERE_ID=%s"
-            (TITULO, AUTOR, ISBN, SINOPSE, CAPA, QUANTIDADE, CATEGORIA_ID, id_livro)
+            "UPDATE Livro SET titulo=%s, autor=%s, isbn=%s, sinopse=%s, capa=%s, quantidade=%s, categoria_id=%s WHERE id=%s",
+            (titulo, autor, isbn, sinopse, capa, quantidade, categoria_id, id_livro)
         )
         conn.commit()
         if cursor.rowcount==0:
@@ -62,15 +62,20 @@ def atualizar_livro(id_livro, titulo, autor, isbn, sinopse, capa, quantidade, ca
     except Exception as e:
         return {"status":"erro","mensagem":str(e)}
     finally:
-        try: conn.close9
+        try: conn.close()
         except: pass
+
 def deletar_livro(id_livro):
     try:
         conn = conectar()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM Livro WHERE id=%s", (id_livro))
+        cursor.execute("DELETE FROM Livro WHERE id=%s", (id_livro,))
         conn.commit()
         if cursor.rowcount==0:
-            return{"status":"aviso","mensagem":"Nenhum livro encontrado parA DELETAR ."}
+            return {"status":"aviso","mensagem":"Nenhum livro encontrado para deletar."}
+        return {"status":"sucesso","mensagem":"Livro excluído com sucesso."}
     except Exception as e:
-        return {}
+        return {"status":"erro","mensagem":str(e)}
+    finally:
+        try: conn.close()
+        except: pass

@@ -29,3 +29,21 @@ def popular():
 
     # bibliotecario / diretor / supervisor
     criar_bibliotecario("Ana Bibli", "ana.bibli@escola.local", "senha123")
+    criar_diretor("João Diretor", "joão.dir@escola.local", "senha123")
+    criar_supervisor("Supervisor X", "supx@escola.local", "senha123")
+
+    # empéstimo exemplo (aluno 1 pega livro 1)
+    criar_emprestimo(1,1)
+    # reserva exemplo
+    criar_reserva(2,2)
+    # sugestão
+    criar_sugestao("Livro Novo", "Autor X", "Ficção", "Seria bom ter este livro.", aluno_id=1)
+    # histórico
+    criar_historico(1,1)
+    # relatório exemplo
+    criar_relatorio("mensal", "2025-08-01", "2025-08-31", gerado_por_bibliotecario=1)
+
+    print("Dados de exemplo inseridos (verifique ids a tabelas).")
+
+if __name__ == "__main__":
+    popular()

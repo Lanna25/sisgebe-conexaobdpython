@@ -10,7 +10,11 @@ def criar_categoria(nome, descricao):
     except Exception as e:
         return{"status":"erro","mensagem":str(e)}
     finally:
-        conn.close()
+        if conn is not None:
+            try:
+                conn.close()
+            except Exception as e:
+                print(f"Erro ao fechar conexão: {e}")
         
 def listar_categorias():
     try:
@@ -21,8 +25,11 @@ def listar_categorias():
     except Exception as e:
         return{"status":"erro","mensagem":str(e)}
     finally:
-        conn.close()
-
+        if conn is not None:
+            try:
+                conn.close()
+            except Exception as e:
+                print(f"Erro ao fechar conexão: {e}")
 def atualizar_categoria(id_categoria, novo_nome, nova_descricao):
     try:
         conn = conectar()
@@ -36,7 +43,11 @@ def atualizar_categoria(id_categoria, novo_nome, nova_descricao):
     except Exception as e:
         return{"status":"erro","mensagem":str(e)}
     finally:
-        conn.close()
+        if conn is not None:
+            try:
+                conn.close()
+            except Exception as e:
+                print(f"Erro ao fechar conexão: {e}")
 
 def deletar_categoria(id_categoria):
     try:
@@ -50,4 +61,8 @@ def deletar_categoria(id_categoria):
     except Exception as e:
         return{"status":"erro","mensagem":str(e)}
     finally:
-        conn.close()
+        if conn is not None:
+            try:
+                conn.close()
+            except Exception as e:
+                print(f"Erro ao fechar conexão: {e}")
